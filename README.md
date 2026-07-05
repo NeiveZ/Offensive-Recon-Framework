@@ -40,8 +40,8 @@ It is not an exploitation framework and does not attempt automatic exploitation.
 ### 1. Clone or extract the project
 
 ```bash
-git clone https://github.com/NeiveZ/ORFX.git
-cd ORFX
+git clone https://github.com/NeiveZ/Offensive-Recon-Framework.git
+cd Offensive-Recon-Framework
 ```
 
 Or, if using the ZIP build:
