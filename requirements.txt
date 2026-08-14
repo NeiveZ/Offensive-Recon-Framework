@@ -1,0 +1,4 @@
+# ORFX core uses Python's standard library only.
+# Optional WHOIS parser. The system `whois` command is preferred when available.
+python-whois>=0.9.4
+dnspython>=2.4.0
