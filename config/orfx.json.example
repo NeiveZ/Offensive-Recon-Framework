@@ -1,8 +1,0 @@
-{
-  "timeout": 5,
-  "threads": 50,
-  "http": true,
-  "tls": true,
-  "ports": false,
-  "port_spec": "top100"
-}
