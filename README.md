@@ -1,67 +1,65 @@
 # ORFX — Offensive Recon Framework
 
-**Framework modular de reconhecimento para avaliações de segurança autorizadas.**
+**Modular reconnaissance framework for authorized security assessments.**
 
-`Python 3.10+` · `Bash` · `CLI simples` · `JSON / TXT / HTML`
+`Python 3.10+` · `Bash` · `Simple CLI` · `JSON / TXT / HTML`
 
-> Desenvolvido para laboratórios, ambientes internos e ativos que você possui ou está explicitamente autorizado a testar.
-
----
-
-## Sobre
-
-O **ORFX (Offensive Recon Framework)** é um toolkit leve de reconhecimento desenvolvido em Python e Bash.
-
-O objetivo é concentrar tarefas comuns de reconhecimento em uma interface CLI simples, mantendo os resultados organizados e correlacionados em um único modelo de ativos.
-
-Principais capacidades:
-
-* Descoberta de domínios e subdomínios
-* Resolução IPv4 e IPv6
-* Enumeração DNS
-* Probing HTTP/HTTPS
-* Identificação básica de tecnologias
-* Inspeção TLS e certificados
-* Descoberta de portas TCP
-* Coleta limitada de banners
-* Consultas WHOIS
-* Correlação de resultados
-* Geração de relatórios estruturados
-
-O ORFX **não implementa exploração, ataques de credenciais, persistência ou ações destrutivas**.
+> Designed for laboratories, internal environments, and assets that you own or are explicitly authorized to assess.
 
 ---
 
-## Requisitos
+## About
 
-Sistemas suportados:
+**ORFX (Offensive Recon Framework)** is a lightweight Python/Bash reconnaissance toolkit designed to centralize common reconnaissance tasks behind a simple command-line interface.
+
+Core capabilities include:
+
+* Domain and subdomain discovery
+* IPv4 and IPv6 resolution
+* DNS enumeration
+* HTTP/HTTPS probing
+* Basic technology detection
+* TLS and certificate inspection
+* TCP port discovery
+* Limited banner collection
+* WHOIS lookups
+* Result correlation
+* Structured reporting
+
+ORFX does **not** implement exploitation, credential attacks, persistence, or destructive actions.
+
+---
+
+## Requirements
+
+Supported environments:
 
 * Kali Linux
 * Debian
 * Ubuntu
 * WSL2
-* Outros sistemas Linux com Python 3.10+ e Bash
+* Other Linux systems with Python 3.10+ and Bash
 
-Requisitos principais:
+Required:
 
 ```text
 Python 3.10+
 Bash
-Acesso de rede
+Network access
 ```
 
-Ferramentas recomendadas:
+Recommended system tools:
 
 ```bash
 sudo apt update
 sudo apt install dnsutils whois -y
 ```
 
-`nmap` é opcional e pode ser utilizado para validação independente dos resultados.
+`nmap` is optional and may be used for independent validation.
 
 ---
 
-## Instalação
+## Installation
 
 ```bash
 git clone https://github.com/NeiveZ/Offensive-Recon-Framework.git
@@ -73,25 +71,25 @@ chmod +x orfx.sh
 ./orfx.sh --check
 ```
 
-O instalador utiliza um ambiente Python isolado em `.venv`.
+The installer creates an isolated Python environment in `.venv`.
 
 ---
 
-## Primeiros comandos
+## Quick Start
 
-Consultar ajuda:
+Display available commands:
 
 ```bash
 ./orfx.sh --help
 ```
 
-Verificar o ambiente:
+Check the environment:
 
 ```bash
 ./orfx.sh --check
 ```
 
-Executar módulos individuais:
+Run individual modules:
 
 ```bash
 ./orfx.sh dns -d example.com
@@ -104,17 +102,17 @@ Executar módulos individuais:
 
 ---
 
-## Comandos principais
+## Core Commands
 
-### Subdomains
+### Subdomain Discovery
 
-Descoberta baseada em fontes passivas e wordlists:
+Discover subdomains using passive sources and wordlists:
 
 ```bash
 ./orfx.sh subdomains -d example.com --resolve
 ```
 
-Perfis disponíveis:
+Available profiles:
 
 ```bash
 ./orfx.sh subdomains -d example.com --profile fast
@@ -122,84 +120,74 @@ Perfis disponíveis:
 ./orfx.sh subdomains -d example.com --profile accurate
 ```
 
----
-
-### DNS
+### DNS Enumeration
 
 ```bash
 ./orfx.sh dns -d example.com
 ```
 
-Selecionar registros:
+Select specific record types:
 
 ```bash
 ./orfx.sh dns -d example.com --records A,AAAA,MX,NS,TXT,SOA,CAA
 ```
 
----
-
-### HTTP / HTTPS
+### HTTP / HTTPS Probing
 
 ```bash
 ./orfx.sh http -u https://example.com
 ```
 
-Também é possível trabalhar com múltiplos alvos:
+Process multiple targets:
 
 ```bash
 ./orfx.sh http -i reports/example_subdomains.txt
 ```
 
-O módulo coleta informações como:
+The module collects information such as:
 
-* Status HTTP
-* URL final
-* Headers
-* Tecnologias básicas
+* HTTP status
+* Final URL
+* Response headers
+* Basic technology fingerprints
 * Security headers
-* Erros de conexão
+* Connection errors
 
----
+### TCP Port Discovery
 
-### TCP Ports
-
-Portas específicas:
+Specific ports:
 
 ```bash
 ./orfx.sh ports -t example.com --ports 22,80,443,8080
 ```
 
-Intervalo:
+Port range:
 
 ```bash
 ./orfx.sh ports -t example.com --ports 1-1024
 ```
 
-Conjunto comum:
+Common ports:
 
 ```bash
 ./orfx.sh ports -t example.com --ports top100
 ```
 
----
-
-### TLS
+### TLS Inspection
 
 ```bash
 ./orfx.sh tls -d example.com
 ```
 
-O módulo analisa:
+The TLS module reports:
 
-* Protocolo TLS
-* Cipher negociado
-* Certificado
-* Emissor
-* Validade
+* TLS protocol
+* Negotiated cipher
+* Certificate information
+* Issuer
+* Expiration
 * SANs
-* Resultado da verificação
-
----
+* Verification status
 
 ### WHOIS
 
@@ -211,13 +199,13 @@ O módulo analisa:
 
 ## Full Reconnaissance
 
-O comando `full` integra os principais módulos em um único fluxo:
+The `full` command combines the main reconnaissance modules into a single workflow:
 
 ```bash
 ./orfx.sh full -d example.com --resolve
 ```
 
-Com descoberta de portas:
+Include TCP port discovery:
 
 ```bash
 ./orfx.sh full -d example.com --resolve --ports top100
@@ -243,7 +231,7 @@ Target
   +-- Unified Report
 ```
 
-`auto` é um alias para `full`:
+`auto` is an alias for `full`:
 
 ```bash
 ./orfx.sh auto -d example.com
@@ -251,37 +239,37 @@ Target
 
 ---
 
-## User-Agent
+## User-Agent Control
 
-O ORFX permite definir ou alternar o `User-Agent` das requisições HTTP.
+ORFX allows the HTTP `User-Agent` to be explicitly defined or rotated.
 
-Valor personalizado:
+Custom value:
 
 ```bash
 ./orfx.sh http -u https://example.com \
   --user-agent "Mozilla/5.0 (compatible; SecurityAssessment/3.2)"
 ```
 
-Rotação:
+Random rotation:
 
 ```bash
 ./orfx.sh http -u https://example.com --user-agent random
 ```
 
-Arquivo personalizado:
+Custom User-Agent file:
 
 ```bash
 ./orfx.sh http -u https://example.com \
   --user-agent @/path/to/user-agents.txt
 ```
 
-A funcionalidade altera somente o header `User-Agent`.
+The feature modifies only the `User-Agent` header.
 
 ---
 
-## Correlação de Resultados
+## Result Correlation
 
-O ORFX transforma os resultados dos módulos em um modelo unificado contendo:
+ORFX combines module output into a unified asset model containing:
 
 ```text
 Target
@@ -297,21 +285,21 @@ Errors
 Summary
 ```
 
-O objetivo é conectar informações já coletadas, sem inventar novos achados.
+The correlation layer connects collected information without inventing additional findings.
 
 ---
 
-## Relatórios
+## Reporting
 
-Os resultados podem ser exportados em três formatos:
+ORFX supports:
 
-```bash
---json
---txt
---html
+```text
+JSON
+TXT
+HTML
 ```
 
-Exemplo:
+Example:
 
 ```bash
 ./orfx.sh full \
@@ -322,26 +310,24 @@ Exemplo:
   --out reports/example_full
 ```
 
-Saída:
+Output:
 
 ```text
 reports/example_full.json
 reports/example_full.html
 ```
 
-Formatos:
-
-| Formato | Uso                                 |
-| ------- | ----------------------------------- |
-| JSON    | Automação e processamento posterior |
-| TXT     | Revisão rápida e arquivamento       |
-| HTML    | Apresentação e análise em navegador |
+| Format | Purpose                                 |
+| ------ | --------------------------------------- |
+| JSON   | Automation and further processing       |
+| TXT    | Quick review and archival               |
+| HTML   | Browser-based analysis and presentation |
 
 ---
 
 ## Normalized Findings
 
-Os módulos convertem os resultados para uma estrutura comum:
+Modules convert collected data into a common finding format:
 
 ```json
 {
@@ -352,7 +338,7 @@ Os módulos convertem os resultados para uma estrutura comum:
 }
 ```
 
-Severidades utilizadas:
+Severity levels:
 
 ```text
 INFO
@@ -362,11 +348,11 @@ HIGH
 ERROR
 ```
 
-Essas classificações são auxiliares de relatório e não substituem análise manual ou ferramentas especializadas.
+These classifications are intended for reporting and do not replace manual validation or specialized security scanners.
 
 ---
 
-## Arquitetura
+## Architecture
 
 ```text
 ORFX/
@@ -385,129 +371,117 @@ ORFX/
 └── README.md
 ```
 
-Principais componentes:
+Main components:
 
 ```text
-core/       → correlação, pipeline e configurações
-modules/    → DNS, HTTP, portas, subdomínios, TLS e WHOIS
-utils/      → utilitários e gerenciamento de sessão
-tests/      → testes automatizados
-config/     → configurações
-reports/    → resultados das execuções
+core/       → correlation, pipeline and configuration
+modules/    → DNS, HTTP, ports, subdomains, TLS and WHOIS
+utils/      → utilities and session management
+tests/      → automated tests
+config/     → configuration files
+reports/    → generated results
 ```
 
 ---
 
-## Performance e Controle
+## Performance Controls
 
-O ORFX utiliza:
+ORFX provides controlled concurrency, configurable timeouts, retries, and scanning profiles.
 
-* Concorrência controlada
-* Timeouts configuráveis
-* Retries
-* Perfis de varredura
-* Limites internos de workers
-
-Perfis de subdomínio:
-
-| Perfil     | Threads | Timeout | Retries |
+| Profile    | Threads | Timeout | Retries |
 | ---------- | ------: | ------: | ------: |
 | `fast`     |      30 |      2s |       1 |
 | `balanced` |      15 |      3s |       2 |
 | `accurate` |       5 |      5s |       3 |
 
-Aumentar threads não significa necessariamente maior precisão. Wordlist, retries, timeout e comportamento do resolver também influenciam a cobertura.
+Higher concurrency does not necessarily increase discovery accuracy. Coverage also depends on wordlists, retries, timeouts, DNS behavior, and network conditions.
 
 ---
 
-## Testes
+## Testing
 
-Os testes ficam em `tests/`.
+Tests are located in `tests/`.
 
-Com `pytest` instalado:
+Run them with:
 
 ```bash
 python3 -m pytest -q
 ```
 
-O projeto mantém testes para componentes como:
+Coverage includes areas such as:
 
-* Normalização de domínio
-* Parsing de portas
-* HTTP
-* TLS
-* Correlação de resultados
-
----
-
-## Filosofia
-
-O ORFX foi desenvolvido com foco em:
-
-**Simplicidade**
-
-Uma CLI única para tarefas comuns de reconhecimento.
-
-**Modularidade**
-
-Cada função principal é isolada em módulos independentes.
-
-**Rastreabilidade**
-
-Resultados e falhas são preservados nos relatórios.
-
-**Controle**
-
-Concorrência, timeout e profundidade de descoberta permanecem configuráveis.
-
-**Correlação**
-
-Os resultados dos diferentes módulos são apresentados como um único modelo de ativos.
+* Domain normalization
+* Port parsing
+* HTTP behavior
+* TLS handling
+* Result correlation
 
 ---
 
-## Escopo e Limitações
+## Design Principles
 
-O ORFX é um framework de **reconhecimento**, não uma plataforma completa de exploração.
+### Simplicity
 
-Não pretende substituir:
+A single CLI provides access to the main reconnaissance workflows.
 
-* Ferramentas completas de vulnerability scanning
-* Frameworks de exploração
-* Plataformas de password testing
-* Crawlers avançados
-* Scanners especializados
+### Modularity
 
-Seu objetivo é oferecer uma base leve e organizada para descoberta, enumeração e correlação de informações.
+Each major reconnaissance function is implemented as an independent module.
 
----
+### Traceability
 
-## Uso Responsável
+Results and collection errors remain available in generated reports.
 
-Use o ORFX somente em:
+### Controlled Execution
 
-* Sistemas próprios
-* Laboratórios
-* Ambientes internos autorizados
-* Ativos para os quais exista permissão explícita
+Concurrency, timeouts, retries, and discovery depth remain configurable.
 
-A autorização é responsabilidade do operador.
+### Correlation
 
-> A capacidade técnica de enviar uma requisição não implica autorização para fazê-lo.
+Results from multiple modules are presented as a unified asset model.
 
 ---
 
-## Licença
+## Scope and Limitations
 
-Este projeto é distribuído sob a licença **MIT**.
+ORFX is a **reconnaissance framework**, not a complete offensive security platform.
 
-Consulte o arquivo [LICENSE](LICENSE) para os termos completos.
+It is not intended to replace:
+
+* Full vulnerability scanners
+* Exploitation frameworks
+* Credential attack platforms
+* Advanced web crawlers
+* Specialized enterprise scanners
+
+Its purpose is to provide a lightweight and organized workflow for discovery, enumeration, and correlation.
 
 ---
 
-## Documentação adicional
+## Responsible Use
 
-Para informações específicas do projeto:
+ORFX must only be used against:
+
+* Systems you own
+* Authorized laboratories
+* Internal environments
+* Assets for which you have explicit permission to perform security testing
+
+The operator is responsible for ensuring that all activity remains within the authorized scope.
+
+> Technical capability does not imply authorization.
+
+---
+
+## License
+
+This project is distributed under the **MIT License**.
+
+See [LICENSE](LICENSE) for the full license terms.
+
+---
+
+## Additional Documentation
 
 ```text
 ETHICS.md
