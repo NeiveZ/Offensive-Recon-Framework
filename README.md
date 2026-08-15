@@ -106,11 +106,35 @@ Run individual modules:
 
 ### Subdomain Discovery
 
-Discover subdomains using passive sources and wordlists:
+Discover subdomains using passive sources and a custom wordlist:
 
 ```bash
-./orfx.sh subdomains -d example.com --resolve
+./orfx.sh subdomains \
+  -d example.com \
+  --wordlist /path/to/subdomains.txt \
+  --resolve
 ```
+
+Example with a local wordlist:
+
+```bash
+./orfx.sh subdomains \
+  -d example.com \
+  --wordlist ./wordlists/subdomains.txt \
+  --resolve
+```
+
+Use a larger wordlist for broader authorized discovery:
+
+```bash
+./orfx.sh subdomains \
+  -d example.com \
+  --wordlist /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt \
+  --profile accurate \
+  --resolve
+```
+
+The supplied wordlist path can be absolute or relative to the current working directory.
 
 Available profiles:
 
@@ -119,6 +143,32 @@ Available profiles:
 ./orfx.sh subdomains -d example.com --profile balanced
 ./orfx.sh subdomains -d example.com --profile accurate
 ```
+
+Override the profile when necessary:
+
+```bash
+./orfx.sh subdomains \
+  -d example.com \
+  --wordlist ./wordlists/subdomains.txt \
+  --profile accurate \
+  --threads 8 \
+  --timeout 6 \
+  --retries 4
+```
+
+A wordlist can contain multi-label entries such as:
+
+```text
+api
+dev
+staging
+dev.api
+internal.web
+```
+
+These are preserved during candidate generation.
+
+---
 
 ### DNS Enumeration
 
@@ -129,8 +179,12 @@ Available profiles:
 Select specific record types:
 
 ```bash
-./orfx.sh dns -d example.com --records A,AAAA,MX,NS,TXT,SOA,CAA
+./orfx.sh dns \
+  -d example.com \
+  --records A,AAAA,MX,NS,TXT,SOA,CAA
 ```
+
+---
 
 ### HTTP / HTTPS Probing
 
@@ -153,6 +207,8 @@ The module collects information such as:
 * Security headers
 * Connection errors
 
+---
+
 ### TCP Port Discovery
 
 Specific ports:
@@ -173,6 +229,8 @@ Common ports:
 ./orfx.sh ports -t example.com --ports top100
 ```
 
+---
+
 ### TLS Inspection
 
 ```bash
@@ -188,6 +246,8 @@ The TLS module reports:
 * Expiration
 * SANs
 * Verification status
+
+---
 
 ### WHOIS
 
@@ -208,7 +268,10 @@ The `full` command combines the main reconnaissance modules into a single workfl
 Include TCP port discovery:
 
 ```bash
-./orfx.sh full -d example.com --resolve --ports top100
+./orfx.sh full \
+  -d example.com \
+  --resolve \
+  --ports top100
 ```
 
 Pipeline:
@@ -217,6 +280,9 @@ Pipeline:
 Target
   |
   +-- Subdomain Discovery
+  |      |
+  |      +-- Passive Sources
+  |      +-- Wordlist
   |
   +-- DNS Enumeration
   |
@@ -246,20 +312,24 @@ ORFX allows the HTTP `User-Agent` to be explicitly defined or rotated.
 Custom value:
 
 ```bash
-./orfx.sh http -u https://example.com \
+./orfx.sh http \
+  -u https://example.com \
   --user-agent "Mozilla/5.0 (compatible; SecurityAssessment/3.2)"
 ```
 
 Random rotation:
 
 ```bash
-./orfx.sh http -u https://example.com --user-agent random
+./orfx.sh http \
+  -u https://example.com \
+  --user-agent random
 ```
 
 Custom User-Agent file:
 
 ```bash
-./orfx.sh http -u https://example.com \
+./orfx.sh http \
+  -u https://example.com \
   --user-agent @/path/to/user-agents.txt
 ```
 
@@ -364,6 +434,7 @@ ORFX/
 ├── tests/
 ├── config/
 ├── reports/
+├── wordlists/
 ├── requirements.txt
 ├── SECURITY.md
 ├── ETHICS.md
@@ -379,6 +450,7 @@ modules/    → DNS, HTTP, ports, subdomains, TLS and WHOIS
 utils/      → utilities and session management
 tests/      → automated tests
 config/     → configuration files
+wordlists/  → optional local discovery wordlists
 reports/    → generated results
 ```
 
@@ -394,7 +466,9 @@ ORFX provides controlled concurrency, configurable timeouts, retries, and scanni
 | `balanced` |      15 |      3s |       2 |
 | `accurate` |       5 |      5s |       3 |
 
-Higher concurrency does not necessarily increase discovery accuracy. Coverage also depends on wordlists, retries, timeouts, DNS behavior, and network conditions.
+Higher concurrency does not necessarily increase discovery accuracy. Coverage also depends on the selected wordlist, retries, timeouts, DNS behavior, and network conditions.
+
+For broader authorized discovery, the wordlist is often more important than simply increasing thread count.
 
 ---
 
